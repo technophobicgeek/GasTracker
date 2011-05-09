@@ -1,0 +1,38 @@
+<div class="pageTitle">
+  <h1>Edit <%= @fuel.distance %></h1>
+</div>
+
+<div class="toolbar">
+  <div class="leftItem backButton">
+    <a href="<%= url_for :action => :index, :id => @fuel.object %>">Cancel</a>
+  </div>
+  <div class="rightItem regularButton">
+    <a class="button" href="<%= url_for :action => :delete, :id => @fuel.object %>">Delete</a>
+  </div>
+</div>
+
+<div class="content">
+  <form method="POST" action="<%= url_for :action => :update %>">
+    <input type="hidden" name="id" value="<%= @fuel.object %>"/>
+    <ul>
+      
+          <li>
+            <label for="fuel[distance]" class="fieldLabel">Distance</label>
+            <input type="text" name="fuel[distance]" value="<%= @fuel.distance %>" <%= placeholder( "Distance" ) %> />
+          </li>
+      
+          <li>
+            <label for="fuel[unit_price]" class="fieldLabel">Unit price</label>
+            <input type="text" name="fuel[unit_price]" value="<%= @fuel.unit_price %>" <%= placeholder( "Unit price" ) %> />
+          </li>
+      
+          <li>
+            <label for="fuel[volume]" class="fieldLabel">Volume</label>
+            <input type="text" name="fuel[volume]" value="<%= @fuel.volume %>" <%= placeholder( "Volume" ) %> />
+          </li>
+      
+      
+    </ul>
+    <input type="submit" class="standardButton" value="Update"/>
+  </form>
+</div>

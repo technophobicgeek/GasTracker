@@ -1,0 +1,63 @@
+<div class="pageTitle">
+  <h1>Fillup History</h1>
+</div>
+
+<div class="toolbar">
+  <div class="leftItem regularButton">
+    <a href="<%= url_for :controller => :Car, :action => :edit, :query => {:id => $car_id} %>">
+      Edit Car Info
+    </a>
+  </div>
+<!--  <div class="centerItem regularButton">
+    <a class="button" href="<%= url_for :action => :chart %>">Chart</a>
+  </div>-->
+  <div class="rightItem regularButton">
+    <a class="button" href="<%= url_for :action => :new %>">Add Entry</a>
+  </div>
+</div>
+<script type="text/javascript" src="/public/jqtouch/jquery.1.3.2.min.js">
+<!--
+<script type="text/javascript">
+  $(function() {
+    $('#entries tr').click(function() {
+      alert("Found tr");
+      var href = $(this).find("a").attr("href");
+      if(href) {
+          window.location = href;
+      }
+    });
+  });
+</script>
+-->
+<table id="entries">
+  <tr>
+    <th>Mileage</th>
+    <th>Distance</th>
+    <th>Volume</th>
+    <th>Price</th>
+  </tr>
+  <% @fuels.each_with_index do |fuel,i| %>
+      <tr class=<%= i.odd? ?  "reg" : "alt"%>>
+        <td>
+          <a href="<%=url_for :action => :edit, :id => fuel.object, :query => {:fuel_id => fuel.object} %>">    
+            <%= fuel.mileage %>
+          </a>
+        </td>
+        <td>
+          <a href="<%=url_for :action => :edit, :id => fuel.object, :query => {:fuel_id => fuel.object} %>">    
+            <%= fuel.distance %>
+          </a>
+        </td>
+        <td>
+          <a href="<%=url_for :action => :edit, :id => fuel.object, :query => {:fuel_id => fuel.object} %>">    
+            <%= fuel.volume %>
+          </a>
+        </td>
+        <td>
+          <a href="<%=url_for :action => :edit, :id => fuel.object, :query => {:fuel_id => fuel.object} %>">    
+            <%= fuel.unit_price %>
+          </a>
+        </td>
+      </tr>
+  <% end %>
+</table>

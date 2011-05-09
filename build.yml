@@ -1,0 +1,23 @@
+sdk: "/Users/rajdev/.rvm/gems/ruby-1.9.2-p180/gems/rhodes-2.4.1"
+sdkversion: 2.4.1
+name: GasTracker
+version: 1.0
+vendor: rhomobile
+build: debug
+bbver: 4.6
+android:
+  version: 2.3
+wmsdk: "Windows Mobile 6 Professional SDK (ARMV4I)"
+applog: rholog.txt
+iphone:
+  configuration: Debug
+  sdk: iphonesimulator4.0
+  provisionprofile:
+  codesignidentity:
+  entitlements:
+  BundleIdentifier: com.plusbzz.gastracker
+  BundleURLScheme: gastracker
+wp:
+  productid: '5d886b60-5b2a-012e-dd1d-34159e217222'
+
+extensions: ["json", "another-extension"]
