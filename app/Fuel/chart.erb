@@ -2,8 +2,9 @@
 <script  type="text/javascript" src="/public/jqtouch/jquery.jqplot.min.js"></script>
 <link rel="stylesheet" type="text/css" href="/public/jqtouch/jquery.jqplot.css" />
 
-<div id="chartdiv" style="height:400px;width:280px;"></div>
-
+<div class="chart">
+  <div id="chartdiv" style="height:<%=$screen_height * 0.8%>px;width:<%= $screen_width * 0.8 %>px;"></div>
+</div>
 
 <script language="javascript" type="text/javascript"> 
   $(document).ready(function(){ 

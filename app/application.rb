@@ -10,8 +10,8 @@ class AppApplication < Rho::RhoApplication
     super
     $rholog = RhoLog.new
 
-    # Uncomment to set sync notification callback to /app/Settings/sync_notify.
-    # SyncEngine::set_objectnotify_url("/app/Settings/sync_notify")
-    # SyncEngine.set_notification(-1, "/app/Settings/sync_notify", '')
+    $screen_width = System.get_property('screen_width')
+    $screen_height = System.get_property('screen_height')
+
   end
 end

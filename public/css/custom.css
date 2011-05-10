@@ -111,6 +111,7 @@
 }
 
 /* Chart */
-.chartdiv {
-  padding-left:50px;
+.chart {
+  padding-top:5%;
+  padding-left:5%;
 }
