@@ -25,10 +25,8 @@ class FuelController < Rho::RhoController
   # GET /Fuel/{1}/edit
   def edit
     @fuel = Fuel.find(@params['id'])
-    if @fuel
-      render :action => :edit, :back => url_for(:action => :index)
-    else
-      redirect :action => :index
+    render :action => :edit, :back => url_for(:action => :index) if @fuel
+    redirect :action => :index unless @fuel
     end
   end
 
@@ -58,11 +56,13 @@ class FuelController < Rho::RhoController
 
   def chart
     @fuels = Fuel.find(:all, :conditions => {'car_id' => $car_id})
+    maxm = (@fuels.map{|f| f.mileage.to_f}).max
     @values = []
+    @xticks = (1..@fuels.length).to_a
+    @yticks = (0..(maxm < 50 ? 10:20)).map{|x| x*5}
     @fuels.each_with_index do |fuel,i|
       @values << [i+1,fuel.mileage.to_f]
     end
-    puts @values.inspect
     render :action => :chart, :back => url_for(:action => :index)
   end
 end

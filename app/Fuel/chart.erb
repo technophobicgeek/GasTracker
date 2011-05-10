@@ -10,8 +10,16 @@
     var values = <%=@values%>;
     plot = $.jqplot('chartdiv',  [values],{
         axes:{
-            xaxis:{show:false},
-            yaxis:{show:true,min:0}
+            xaxis:{
+                show:false,
+                ticks: <%=@xticks%>,
+                tickOptions:{show:false}
+              },
+            yaxis:{
+                show:true,
+                min:0,
+                ticks: <%=@yticks%>
+              }
           }
       }
     ); 
