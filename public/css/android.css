@@ -381,10 +381,14 @@ h1 {
     color:#000000;
     background-color:#EAF2D3;
 }
-#entries td li
+#entries td a
 {
     color:#000000;
 }
+#entries td.editcell
+{
+}
+
 
 /* Custom CSS */
 
