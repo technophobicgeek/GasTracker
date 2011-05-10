@@ -25,26 +25,39 @@ class FuelController < Rho::RhoController
   # GET /Fuel/{1}/edit
   def edit
     @fuel = Fuel.find(@params['id'])
-    render :action => :edit, :back => url_for(:action => :index) if @fuel
-    redirect :action => :index unless @fuel
+    if @fuel
+      render :action => :edit, :back => url_for(:action => :index)
+    else
+      redirect :action => :index
     end
   end
 
   # POST /Fuel/create
   def create
-    @fuel = Fuel.create(@params['fuel'])
-    if @fuel
-      mileage = sprintf("%.1f",@fuel.distance.to_f / @fuel.volume.to_f)
-      @fuel.update_attributes({:mileage => mileage})
+    create_or_update do |params|
+      Fuel.create params
     end
-    redirect :action => :index
   end
 
   # POST /Fuel/{1}/update
   def update
-    @fuel = Fuel.find(@params['id'])
-    @fuel.update_attributes(@params['fuel']) if @fuel
-    redirect :action => :index
+    create_or_update do |params|
+      @fuel = Fuel.find(@params['id'])
+      @fuel.update_attributes params if @fuel
+    end
+  end
+  
+  def create_or_update
+    begin
+      yield(Fuel.accept_params(@params['fuel']))
+      redirect :action => :index
+    rescue ArgumentError => msg
+      Alert.show_popup(
+          :message=>"#{msg}\n",
+          :title=>"",
+          :buttons => ["Ok"]
+      )
+    end
   end
 
   # POST /Fuel/{1}/delete
@@ -65,4 +78,5 @@ class FuelController < Rho::RhoController
     end
     render :action => :chart, :back => url_for(:action => :index)
   end
+  
 end
