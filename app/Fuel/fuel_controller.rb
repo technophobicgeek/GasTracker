@@ -56,4 +56,13 @@ class FuelController < Rho::RhoController
     redirect :action => :index
   end
 
+  def chart
+    @fuels = Fuel.find(:all, :conditions => {'car_id' => $car_id})
+    @values = []
+    @fuels.each_with_index do |fuel,i|
+      @values << [i+1,fuel.mileage.to_f]
+    end
+    puts @values.inspect
+    render :action => :chart, :back => url_for(:action => :index)
+  end
 end

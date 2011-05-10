@@ -8,24 +8,14 @@
       Edit Car Info
     </a>
   </div>
-<!--  <div class="centerItem regularButton">
+  <div class="centerItem regularButton">
     <a class="button" href="<%= url_for :action => :chart %>">Chart</a>
-  </div>-->
+  </div>
   <div class="rightItem regularButton">
     <a class="button" href="<%= url_for :action => :new %>">Add Entry</a>
   </div>
 </div>
 
-<!--
-<script type="text/javascript">
-  jQT(function() {
-    $('#entries tr').click(function() {
-      var f = (this).find("a").attr("href");
-      if(f) {window.location = f;}
-    });
-  });
-</script>
--->
 <table id="entries">
   <tr>
     <th>Mileage</th>
