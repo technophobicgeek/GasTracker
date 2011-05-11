@@ -34,22 +34,31 @@ class FuelController < Rho::RhoController
 
   # POST /Fuel/create
   def create
-    create_or_update(:new) do |params|
-      Fuel.create params
+    create_or_update do |params|
+      @fuel = Fuel.create params
+      puts "FUEL #{@fuel}"
+      Alert.show_popup(
+          :message=>"Time to reset your trip odometer!\n",
+          :title=>"Reminder",
+          :icon => :info,
+          :buttons => ["Ok"]
+      ) if @fuel
     end
   end
 
   # POST /Fuel/{1}/update
   def update
-    create_or_update(:edit) do |params|
+    create_or_update do |params|
       @fuel = Fuel.find(@params['id'])
       @fuel.update_attributes params if @fuel
+      redirect :action => :index
     end
   end
   
-  def create_or_update(origin)
+  def create_or_update
     begin
-      yield(Fuel.accept_params(@params['fuel']))
+      params = Fuel.accept_params(@params['fuel'])
+      yield(params) if params
       redirect :action => :index
     rescue ArgumentError => msg
       Alert.show_popup(
@@ -57,12 +66,12 @@ class FuelController < Rho::RhoController
           :title=>"Error",
           :icon => :alert,
           :buttons => ["Ok"],
-          :callback => url_for(:action => popup_callback)
+          :callback => url_for(:action => error_callback)
       )
     end
   end
   
-  def popup_callback
+  def error_callback
     WebView.navigate WebView.current_location
   end
 
