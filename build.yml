@@ -1,5 +1,5 @@
 --- 
-sdk: /Users/rajdev/.rvm/gems/ruby-1.9.2-p180/gems/rhodes-2.4.1
+sdk: /Users/technophobicgeek/.rvm/gems/ruby-1.9.2-p180/gems/rhodes-2.4.1
 sdkversion: 2.4.1
 name: GasTracker
 version: 1.0

@@ -81,15 +81,27 @@ class FuelController < Rho::RhoController
   end
 
   def chart
-    @fuels = Fuel.find(:all, :conditions => {'car_id' => $car_id})
-    maxm = (@fuels.map{|f| f.mileage.to_f}).max
+    stats_helper
     @values = []
     @xticks = (1..@fuels.length).to_a
-    @yticks = (0..(maxm < 50 ? 10:20)).map{|x| x*5}
+    @yticks = ((@minimum/5).floor .. (@maximum/5).ceil).map{|x| x*5}
     @fuels.each_with_index do |fuel,i|
       @values << [i+1,fuel.mileage.to_f]
     end
     render :action => :chart, :back => url_for(:action => :index)
   end
   
+  def stats
+    stats_helper
+    render :action => :stats, :back => url_for(:action => :index)
+  end
+  
+  def stats_helper
+    @carname = Car.find($car_id).name
+    @fuels = Fuel.find(:all, :conditions => {'car_id' => $car_id})
+    mileages = @fuels.map{|f| f.mileage.to_f}
+    @maximum = mileages.max
+    @minimum = mileages.min
+    @average = mileages.inject(0.0){ |sum, el| sum + el }.to_f / mileages.size
+  end
 end

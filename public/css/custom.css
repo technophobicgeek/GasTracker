@@ -110,8 +110,11 @@
   font-family : "Times",serif;
 }
 
+.pageTitle h1 {
+  display:block
+}
 /* Chart */
 .chart {
-  padding-top:5%;
-  padding-left:5%;
+  padding-top:10%;
+  padding-left:10%;
 }
