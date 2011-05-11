@@ -17,12 +17,24 @@
             <label for="car[name]" class="fieldLabel">Name</label>
             <input type="text" name="car[name]" value="<%= @car.name %>" <%= placeholder( "Name" ) %> />
           </li>
-<!--      
+ 
           <li>
-            <label for="car[code]" class="fieldLabel">Code</label>
-            <label for="car[code]" class="fieldLabel"><%= @car.code %></label>
+            <label for="car[make]" class="fieldLabel">Make</label>
+            <input type="text" make="car[make]" value="<%= @car.make %>" <%=placeholder("Make") %> />
           </li>
-      -->
+      
+       
+          <li>
+            <label for="car[model]" class="fieldLabel">Model</label>
+            <input type="text" model="car[model]" value="<%= @car.model %>" <%=placeholder("Model") %> />
+          </li>
+      
+      
+          <li>
+            <label for="car[year]" class="fieldLabel">Year</label>
+            <input type="text" name="car[year]" value="<%= @car.year %>" <%=placeholder("Year") %> />
+          </li>
+      
     </ul>
     <input type="submit" class="standardButton" value="Update Car info"/>
   </form>
