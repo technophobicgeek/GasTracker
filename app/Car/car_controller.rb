@@ -69,7 +69,7 @@ class CarController < Rho::RhoController
   end
    
   def error_callback
-    WebView.navigate WebView.current_location
+    redirect :action => :index
   end
 
   
