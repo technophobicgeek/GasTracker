@@ -21,6 +21,7 @@
 
 <table id="entries">
   <tr>
+    <th>Date</th>
     <th>Mileage</th>
     <th>Distance</th>
     <th>Volume</th>
@@ -28,7 +29,7 @@
   </tr>
   <% @fuels.each_with_index do |fuel,i| %>
       <tr class=<%= i.odd? ?  "reg" : "alt"%>>
-        <% [:mileage,:distance,:volume,:unit_price].each do |field| %>
+        <% [:fill_date, :mileage,:distance,:volume,:unit_price].each do |field| %>
           <td>
             <a href="<%=url_for :action => :edit, :id => fuel.object, :query => {:fuel_id => fuel.object} %>">    
               <%= fuel.send field %>

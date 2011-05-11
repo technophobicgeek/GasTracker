@@ -11,11 +11,20 @@ class FuelController < Rho::RhoController
   #GET /Fuel: render all fillups for given car
   def index
     $car_id = @params['car_id'] unless @params['car_id'].nil?
-    @fuels = Fuel.find(:all, :conditions => {'car_id' => $car_id})
+    @fuels = fuels_finder
     WebView.navigate("/app/Fuel/new")  if @fuels.empty?
     render :back => '/app' unless @fuels.empty?
   end
 
+  def fuels_finder
+    Fuel.find(
+      :all,
+      :conditions => {'car_id' => $car_id},
+      :order => 'timestamp',
+      :orderdir => 'DESC'
+    )
+  end
+  
   # GET /Fuel/new
   def new
     @fuel = Fuel.new
@@ -98,7 +107,7 @@ class FuelController < Rho::RhoController
   
   def stats_helper
     @carname = Car.find($car_id).name
-    @fuels = Fuel.find(:all, :conditions => {'car_id' => $car_id})
+    @fuels = fuels_finder
     mileages = @fuels.map{|f| f.mileage.to_f}
     @maximum = mileages.max
     @minimum = mileages.min

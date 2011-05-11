@@ -9,8 +9,9 @@ class AppApplication < Rho::RhoApplication
     @@toolbar = [
       {:action => :back},
       {:action => :separator},
+      {:action => :home},
       {:action => :separator},
-      {:action => :home}
+      {:action => :options}
     ]
     
     super

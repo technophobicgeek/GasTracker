@@ -17,6 +17,7 @@ class Fuel
       check_value(params["volume"],"Volume") 
       mileage = sprintf("%.1f",params["distance"].to_f / params["volume"].to_f).to_f
       params[:mileage] = mileage
+      params[:timestamp] = Time.now.to_i
     end
     return params
   end
@@ -29,5 +30,10 @@ class Fuel
     rescue RangeError
       raise ArgumentError, "#{name} must be greater than Zero"
     end
+  end
+  
+  def fill_date
+    Time.at(self.timestamp).strftime("%m/%d") if self.timestamp
+    "" unless self.timestamp
   end
 end
