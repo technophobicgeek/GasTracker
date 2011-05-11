@@ -10,8 +10,8 @@ class AppApplication < Rho::RhoApplication
       {:action => :back},
       {:action => :separator},
       {:action => :home},
-      {:action => :separator},
-      {:action => :options}
+      #{:action => :separator},
+      #{:action => :options}
     ]
     
     super

@@ -1,10 +1,13 @@
-# The model has already been created by the framework, and extends Rhom::RhomObject
-# You can add more methods here
 class Car
   include Rhom::PropertyBag
 
-  # Uncomment the following line to enable sync with Car.
-  # enable :sync
-
-  #add model specifc code here
+  def self.accept_params(params)
+    if params
+      name = params["name"]
+      if name.nil? || name == "" || name.length==0
+        raise ArgumentError, "Name of car cannot be empty!"
+      end
+    end
+    return params
+  end
 end

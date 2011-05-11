@@ -31,7 +31,7 @@ class CarController < Rho::RhoController
   def edit
     @car = Car.find(@params['id'])
     if @car
-      render :action => :edit, :back => url_for(:action => :index)
+      render :action => :edit, :back => url_for(:controller => :Fuel, :action => :index)
     else
       redirect :action => :index
     end
@@ -39,17 +39,40 @@ class CarController < Rho::RhoController
 
   # POST /Car/create
   def create
-    @car = Car.create(@params['car'])
-    redirect :action => :index
+    create_or_update do |params|
+      Car.create params
+    end
   end
 
   # POST /Car/{1}/update
   def update
-    @car = Car.find(@params['id'])
-    @car.update_attributes(@params['car']) if @car
-    redirect :action => :index
+    create_or_update do |params|
+      @car = Car.find(@params['id'])
+      @car.update_attributes(@params['car']) if @car
+    end
+  end
+  
+  def create_or_update
+    begin
+      params = Car.accept_params(@params['car'])
+      yield(params) if params
+      redirect :action => :index
+    rescue ArgumentError => msg
+      Alert.show_popup(
+          :message=>"#{msg}\n",
+          :title=>"Error",
+          :icon => :alert,
+          :buttons => ["Ok"],
+          :callback => url_for(:action => error_callback)
+      )
+    end
+  end
+   
+  def error_callback
+    WebView.navigate WebView.current_location
   end
 
+  
   # POST /Car/{1}/delete
   def delete
     @car = Car.find(@params['id'])

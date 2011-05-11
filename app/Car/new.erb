@@ -1,12 +1,7 @@
 <div class="pageTitle">
-  <h1>New <%= @car.title %></h1>
+  <h1>Add a car</h1>
 </div>
 
-<div class="toolbar">
-  <div class="leftItem backButton">
-    <a class="cancel" href="<%= url_for :action => :index %>">Cancel</a>
-  </div>
-</div>
 
 <div class="content">
   <form method="POST" action="<%= url_for :action => :create %>">
@@ -15,10 +10,32 @@
       
           <li>
             <label for="car[name]" class="fieldLabel">Name</label>
-            <input type="text" name="car[name]" <%=
-            placeholder("Name") %> />
+            <input type="text" name="car[name]" <%=placeholder("Name") %> />
           </li>
       
+          <li>
+            <label  class="customFieldLabel">Optional Info</label>
+          </li>
+      
+       
+          <li>
+            <label for="car[make]" class="fieldLabel">Make</label>
+            <input type="text" make="car[make]" <%=placeholder("Make") %> />
+          </li>
+      
+       
+          <li>
+            <label for="car[model]" class="fieldLabel">Model</label>
+            <input type="text" model="car[model]" <%=placeholder("Model") %> />
+          </li>
+      
+      
+          <li>
+            <label for="car[year]" class="fieldLabel">Year</label>
+            <input type="text" name="car[year]" <%=placeholder("Year") %> />
+          </li>
+      
+        
     </ul>
     <input type="submit" class="standardButton" value="Create Car"/>
   </form>
