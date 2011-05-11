@@ -36,7 +36,6 @@ class FuelController < Rho::RhoController
   def create
     create_or_update do |params|
       @fuel = Fuel.create params
-      puts "FUEL #{@fuel}"
       Alert.show_popup(
           :message=>"Time to reset your trip odometer!\n",
           :title=>"Reminder",
@@ -51,7 +50,6 @@ class FuelController < Rho::RhoController
     create_or_update do |params|
       @fuel = Fuel.find(@params['id'])
       @fuel.update_attributes params if @fuel
-      redirect :action => :index
     end
   end
   
