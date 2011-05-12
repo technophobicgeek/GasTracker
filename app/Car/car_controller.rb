@@ -7,6 +7,8 @@ class CarController < Rho::RhoController
   #GET /Car
   def index
     @cars = Car.find(:all)
+    Rho::NativeTabbar.remove
+    $tabbar_active = false
     WebView.navigate("/app/Car/new") if @cars.empty?
     render :back => '/app' unless @cars.empty?
   end
@@ -39,33 +41,35 @@ class CarController < Rho::RhoController
 
   # POST /Car/create
   def create
-    create_or_update do |params|
+    begin
+      params = Car.accept_params(@params['car'])
       Car.create params
+      redirect :action => :index
+    rescue ArgumentError => msg
+      error_popup msg
     end
   end
 
   # POST /Car/{1}/update
   def update
-    create_or_update do |params|
+    begin
+      params = Car.accept_params(@params['car'])
       @car = Car.find(@params['id'])
       @car.update_attributes(@params['car']) if @car
+      redirect(:controller => :Fuel, :action => :index)
+    rescue ArgumentError => msg
+      error_popup msg
     end
   end
   
-  def create_or_update
-    begin
-      params = Car.accept_params(@params['car'])
-      yield(params) if params
-      redirect :action => :index
-    rescue ArgumentError => msg
-      Alert.show_popup(
-          :message=>"#{msg}\n",
-          :title=>"Error",
-          :icon => :alert,
-          :buttons => ["Ok"],
-          :callback => url_for(:action => error_callback)
-      )
-    end
+  def error_popup(msg)
+    Alert.show_popup(
+        :message=>"#{msg}\n",
+        :title=>"Error",
+        :icon => :alert,
+        :buttons => ["Ok"],
+        :callback => url_for(:action => error_callback)
+    )
   end
    
   def error_callback

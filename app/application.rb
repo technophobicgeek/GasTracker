@@ -6,13 +6,12 @@ class AppApplication < Rho::RhoApplication
     @tabs = nil
     @@tabbar = nil
     
-    @@toolbar = [
-      {:action => :back},
-      {:action => :separator},
-      {:action => :home},
-      #{:action => :separator},
-      #{:action => :options}
-    ]
+    @@toolbar = nil
+    #[
+    #  {:action => :back},
+    #  {:action => :separator},
+    #  {:action => :home}
+    #]
     
     super
     $rholog = RhoLog.new

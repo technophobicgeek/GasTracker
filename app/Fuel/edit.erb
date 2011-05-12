@@ -3,9 +3,6 @@
 </div>
 
 <div class="toolbar">
-  <div class="leftItem backButton">
-    <a href="<%= url_for :action => :index, :id => @fuel.object %>">Cancel</a>
-  </div>
   <div class="rightItem regularButton">
     <a class="button" href="<%= url_for :action => :delete, :id => @fuel.object %>">Delete</a>
   </div>
@@ -33,6 +30,6 @@
       
       
     </ul>
-    <input type="submit" class="standardButton" value="Update"/>
+    <input type="submit" class="standardButton" value="Update fillup entry"/>
   </form>
 </div>
