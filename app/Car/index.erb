@@ -12,7 +12,7 @@
     <% @cars.each do |car| %>
     
         <li>
-          <a href="<%= url_for :controller => :Fuel, :action => :index, :query => {:car_id => car.object} %>">
+          <a href="<%= url_for :controller => :Fuel, :action => :index, :query => {:car_id => car.object, :page => 0} %>">
             <span class="title"><%= car.name %></span><span class="disclosure_indicator"></span>
           </a>
         </li>

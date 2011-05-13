@@ -8,7 +8,6 @@ class CarController < Rho::RhoController
   def index
     @cars = Car.find(:all)
     Rho::NativeTabbar.remove
-    $tabbar_active = false
     WebView.navigate("/app/Car/new") if @cars.empty?
     render :back => '/app' unless @cars.empty?
   end
@@ -17,7 +16,7 @@ class CarController < Rho::RhoController
   def show
     @car = Car.find(@params['id'])
     if @car
-      render :action => :show, :back => url_for(:action => :index)
+      render :action => :show
     else
       redirect :action => :index
     end
@@ -26,14 +25,14 @@ class CarController < Rho::RhoController
   # GET /Car/new
   def new
     @car = Car.new
-    render :action => :new, :back => url_for(:action => :index)
+    render :action => :new
   end
 
   # GET /Car/{1}/edit
   def edit
     @car = Car.find(@params['id'])
     if @car
-      render :action => :edit, :back => url_for(:controller => :Fuel, :action => :index)
+      render :action => :edit
     else
       redirect :action => :index
     end

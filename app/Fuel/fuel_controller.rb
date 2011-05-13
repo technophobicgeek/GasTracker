@@ -9,14 +9,8 @@ class FuelController < Rho::RhoController
     $rholog.info("APP",msg)
   end
   
-  def save_location
-    location = WebView.current_location
-    puts "location: #{location}"
-    @@this_page = location
-  end
   
-  def set_tabbar_index
-    save_location
+  def set_tabbar_index    
     tabbar = [
       {
         :label => 'Fillups',
@@ -46,43 +40,77 @@ class FuelController < Rho::RhoController
       }
     ]
     Rho::NativeTabbar.create(tabbar)
-    $tabbar_active = true
+    $tabbar_index_active = true
   end
  
 
   #GET /Fuel: render all fillups for given car
   def fillups
     $car_id = @params['car_id'] unless @params['car_id'].nil?
+    $fillups_page = @params['page'].to_i unless @params['page'].nil?
     @fuels = fuels_finder
-    WebView.navigate("/app/Fuel/new")  if @fuels.empty?
-    render :back => '/app' unless @fuels.empty?
+    if (@fuels.empty? and $fillups_page == 0)
+      WebView.navigate("/app/Fuel/new")
+    else
+      render
+    end
   end
 
-  def index
-    $car_id = @params['car_id'] unless @params['car_id'].nil?
-    set_tabbar_index   
+  def older_fillups
   end
   
-  def fuels_finder
-    Fuel.find(
-      :all,
-      :conditions => {'car_id' => $car_id},
-      :order => 'timestamp',
-      :orderdir => 'DESC'
+  def newer_fillups
+  end
+  
+#<div data-role="button" class="paginate_button" link="<%= url_for :action => 
+#:more, :query => { :page => 1, :order => @order, :order_dir => @order_dir } 
+#%>"><%= t('Show More...')%></div>
+  #
+  #def more 
+  #   @module = Fuel.paginate(
+  #              {
+  #                 :conditions => {'car_id' => $car_id},
+  #                 :order => 'timestamp',
+  #                 :orderdir => 'DESC'
+  #                 :per_page => 5,
+  #                 :page => $fillups_page,
+  #              }
+  #            ) 
+  #   @show_more_button = @module.length >= per_page 
+  #   render :action => :more 
+  #end
+
+  def index
+    Rho::NativeTabbar.remove
+    $car_id = @params['car_id'] unless @params['car_id'].nil?
+    $fillups_page = (@params['page'].nil? ? 0 : @params['page'].to_i)
+    set_tabbar_index 
+  end
+  
+  def fuels_finder(per_page = 5)
+    Fuel.paginate(
+      {
+        :conditions => {'car_id' => $car_id},
+        :order => 'timestamp',
+        :orderdir => 'DESC',
+        :per_page => per_page,
+        :page => $fillups_page,
+        :select => ['timestamp','distance','volume','mileage']
+      }
     )
   end
   
   # GET /Fuel/new
   def new
     @fuel = Fuel.new
-    render :action => :new, :back => url_for(:action => :fillups)
+    render :action => :new
   end
 
   # GET /Fuel/{1}/edit
   def edit
     @fuel = Fuel.find(@params['id'])
     if @fuel
-      render :action => :edit, :back => url_for(:action => :fillups)
+      render :action => :edit
     else
       redirect :action => :fillups
     end
@@ -137,7 +165,6 @@ class FuelController < Rho::RhoController
   end
 
   def set_tabbar_stats
-    save_location
     tabbar = [
       {
         :label => 'Chart',
@@ -166,7 +193,7 @@ class FuelController < Rho::RhoController
       },
     ]
     Rho::NativeTabbar.create(tabbar)
-    $tabbar_active = true
+    $tabbar_stats_active = true
   end
   
   def summary
@@ -182,12 +209,12 @@ class FuelController < Rho::RhoController
     @fuels.each_with_index do |fuel,i|
       @values << [i+1,fuel.mileage.to_f]
     end
-    render :action => :chart, :back => url_for(:action => :fillups)
+    render :action => :chart
   end
   
   def stats
     stats_helper
-    render :action => :stats, :back => url_for(:action => :fillups)
+    render :action => :stats
   end
   
   def stats_helper

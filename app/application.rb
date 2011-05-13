@@ -6,9 +6,7 @@ class AppApplication < Rho::RhoApplication
     @tabs = nil
     @@tabbar = nil
     
-    @@toolbar = nil
-    #[
-    #  {:action => :back},
+    @@toolbar = [{:action => :options}]
     #  {:action => :separator},
     #  {:action => :home}
     #]

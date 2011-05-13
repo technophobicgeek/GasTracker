@@ -1,35 +1,18 @@
 <div class="pageTitle">
   <h1>Fillup History</h1>
 </div>
-<!--
-<div class="toolbar">
-  <div class="leftItem regularButton">
-    <a href="<%= url_for :controller => :Car, :action => :edit, :query => {:id => $car_id} %>">
-      Edit Car Info
-    </a>
-  </div>
-  <div class="centerItem regularButton">
-    <a class="button" href="<%= url_for :action => :chart %>">Chart</a>
-  </div>
-  <div class="centerItem regularButton">
-    <a class="button" href="<%= url_for :action => :stats %>">Stats</a>
-  </div>
-  <div class="rightItem regularButton">
-    <a class="button" href="<%= url_for :action => :new %>">Add Entry</a>
-  </div>
-</div>
--->
-<table id="entries">
+
+<table id="entries" align="center">
   <tr>
     <th>Date</th>
     <th>Mileage</th>
     <th>Distance</th>
     <th>Volume</th>
-    <th>Price</th>
+    <!--<th>Price</th>-->
   </tr>
   <% @fuels.each_with_index do |fuel,i| %>
       <tr class=<%= i.odd? ?  "reg" : "alt"%>>
-        <% [:fill_date, :mileage,:distance,:volume,:unit_price].each do |field| %>
+        <% [:fill_date, :mileage,:distance,:volume].each do |field| %>
           <td>
             <a href="<%=url_for :action => :edit, :id => fuel.object, :query => {:fuel_id => fuel.object} %>">    
               <%= fuel.send field %>
