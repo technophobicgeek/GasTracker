@@ -6,8 +6,6 @@ version: 1.0
 vendor: rhomobile
 build: debug
 bbver: 4.6
-android: 
-  version: 2.3
 wmsdk: Windows Mobile 6 Professional SDK (ARMV4I)
 applog: rholog.txt
 iphone: 

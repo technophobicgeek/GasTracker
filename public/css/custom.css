@@ -4,9 +4,8 @@
 #entries
 {
     font-family:"Trebuchet MS", Arial, Helvetica, sans-serif;
-    width:90%;
+    width:100%;
     border-collapse:collapse;
-    padding-top:20%;
 }
 #entries th 
 {
@@ -41,7 +40,28 @@
     display: block;
 }
 
-
+#entries tr.footer td 
+{
+    border: none;
+    background-color:#000000
+}
+#entries tr.footer td a
+{
+    background: -webkit-gradient(
+        linear, left top,
+        left bottom,
+        color-stop(0.0, #C2D887),
+        color-stop(0.2, #A7C942), 
+        color-stop(1.0, #C2D887)
+    );
+    font-size:1.1em;
+    line-height: 40px;
+    color: white;
+    display: block;
+    border:1px solid #98bf21;
+    -webkit-border-radius: 5px;
+    text-align: center;
+}
 /* Custom CSS */
 
 .custom {

@@ -21,4 +21,24 @@
         <% end %>      
       </tr>
   <% end %>
+  <tr class="footer">
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+  </tr>
+  <tr class="footer">
+    <td>
+      <% if $fillups_page > 0 %>
+        <a href="<%= url_for :action => :newer_fillups %>">Newer</a>
+      <% end %>        
+    </td>
+    <td></td>
+    <td></td>
+    <td>      
+      <% if $fillups_page < @last_page %>
+        <a href="<%= url_for :action => :older_fillups %>">Older</a>
+      <% end %>        
+    </td>
+  </tr>
 </table>

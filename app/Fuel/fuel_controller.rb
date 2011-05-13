@@ -37,6 +37,7 @@ class FuelController < Rho::RhoController
         :label => 'Add Entry',
         :action => url_for(:action => :new),
         :icon => '/public/images/android/add.png',
+        :reload => true
       }
     ]
     Rho::NativeTabbar.create(tabbar)
@@ -44,61 +45,45 @@ class FuelController < Rho::RhoController
   end
  
 
-  #GET /Fuel: render all fillups for given car
+  #GET /Fuel: render  fillups for given car
   def fillups
-    $car_id = @params['car_id'] unless @params['car_id'].nil?
-    $fillups_page = @params['page'].to_i unless @params['page'].nil?
-    @fuels = fuels_finder
+    @last_page = ($car.fillup_count.to_i - 1) / $fillups_per_page.to_i
+    @fuels = Fuel.paginate(
+              {
+                :conditions => {'car_id' => $car_id},
+                :order => 'timestamp',
+                :orderdir => 'DESC',
+                :per_page => $fillups_per_page,
+                :page => $fillups_page,
+                :select => ['timestamp','distance','volume','mileage','fill_date']
+              }
+            )
     if (@fuels.empty? and $fillups_page == 0)
       WebView.navigate("/app/Fuel/new")
     else
       render
     end
   end
-
+ 
   def older_fillups
+    $fillups_page += 1
+    redirect :action => :fillups
   end
-  
-  def newer_fillups
-  end
-  
-#<div data-role="button" class="paginate_button" link="<%= url_for :action => 
-#:more, :query => { :page => 1, :order => @order, :order_dir => @order_dir } 
-#%>"><%= t('Show More...')%></div>
-  #
-  #def more 
-  #   @module = Fuel.paginate(
-  #              {
-  #                 :conditions => {'car_id' => $car_id},
-  #                 :order => 'timestamp',
-  #                 :orderdir => 'DESC'
-  #                 :per_page => 5,
-  #                 :page => $fillups_page,
-  #              }
-  #            ) 
-  #   @show_more_button = @module.length >= per_page 
-  #   render :action => :more 
-  #end
 
+  def newer_fillups
+    $fillups_page -= 1
+    redirect :action => :fillups
+  end
+  
   def index
     Rho::NativeTabbar.remove
     $car_id = @params['car_id'] unless @params['car_id'].nil?
+    $car = Car.find($car_id) if $car_id
     $fillups_page = (@params['page'].nil? ? 0 : @params['page'].to_i)
+    $fillups_per_page = 5
     set_tabbar_index 
   end
   
-  def fuels_finder(per_page = 5)
-    Fuel.paginate(
-      {
-        :conditions => {'car_id' => $car_id},
-        :order => 'timestamp',
-        :orderdir => 'DESC',
-        :per_page => per_page,
-        :page => $fillups_page,
-        :select => ['timestamp','distance','volume','mileage']
-      }
-    )
-  end
   
   # GET /Fuel/new
   def new
@@ -120,6 +105,8 @@ class FuelController < Rho::RhoController
   def create
     create_or_update do |params|
       @fuel = Fuel.create params
+      $car.fillup_count = ($car.fillup_count.to_i)+1
+      $car.save
       Alert.show_popup(
           :message=>"Time to reset your trip odometer!\n",
           :title=>"Reminder",
@@ -161,6 +148,8 @@ class FuelController < Rho::RhoController
   def delete
     @fuel = Fuel.find(@params['id'])
     @fuel.destroy if @fuel
+    $car.fillup_count = ($car.fillup_count.to_i)-1
+    $car.save
     redirect :action => :fillups
   end
 
@@ -204,7 +193,7 @@ class FuelController < Rho::RhoController
   def chart
     stats_helper
     @values = []
-    @xticks = (1..@fuels.length).to_a
+    @xticks = @fuels.map{|f| f.fill_date}
     @yticks = ((@minimum/5).floor .. (@maximum/5).ceil).map{|x| x*5}
     @fuels.each_with_index do |fuel,i|
       @values << [i+1,fuel.mileage.to_f]
@@ -218,11 +207,17 @@ class FuelController < Rho::RhoController
   end
   
   def stats_helper
-    @carname = Car.find($car_id).name
-    @fuels = fuels_finder
+    @carname = $car.name
+    @fuels = Fuel.find(
+              :all,
+              :conditions => {'car_id' => $car_id},
+              :order => 'timestamp',
+              :orderdir => 'DESC',
+              :select => ["fill_date","mileage"]
+            )[0..10]
     mileages = @fuels.map{|f| f.mileage.to_f}
     @maximum = mileages.max
     @minimum = mileages.min
-    @average = mileages.inject(0.0){ |sum, el| sum + el }.to_f / mileages.size
+    @average = sprintf("%.1f",mileages.inject(0.0){ |sum, el| sum + el }.to_f / mileages.size)
   end
 end

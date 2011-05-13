@@ -4,12 +4,8 @@ class AppApplication < Rho::RhoApplication
   def initialize
 
     @tabs = nil
-    @@tabbar = nil
-    
-    @@toolbar = [{:action => :options}]
-    #  {:action => :separator},
-    #  {:action => :home}
-    #]
+    @@tabbar = nil    
+    @@toolbar = nil
     
     super
     $rholog = RhoLog.new
